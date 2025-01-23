@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="bg-cover bg-center h-56 p-4">
+                <div class="flex justify-end">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="document.getElementById('editProfileModal').classList.remove('hidden')">Edit Profile</button>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="w-24 h-24 rounded-full mx-auto">
+                        <input id="profileImageInput" type="file" name="profile_image" class="hidden">
+                    </div>
+                    <div class="mb-4">
+                        <h1 class="text-2xl font-bold">Username</h1>
+                        <p id="usernameDisplay" class="text-gray-600">examl21</p>
+                        <input id="usernameInput" type="text" name="username" class="w-full max-w-md px-4 py-2 border rounded-md hidden" value="examl21">
+                    </div>
+                    <div class="mb-4">
+                        <h1 class="text-2xl font-bold">Email</h1>
+                        <p id="emailDisplay" class="text-gray-600">johndoe@example.com</p>
+                        <input id="emailInput" type="email" name="email" class="w-full max-w-md px-4 py-2 border rounded-md hidden" value="johndoe@example.com">
+                    </div>
+                    <div class="mb-4">
+                        <h1 class="text-2xl font-bold">Password</h1>
+                        <p id="passwordDisplay" class="text-gray-600">********</p>
+                        <input id="passwordInput" type="password" name="password" class="w-full max-w-md px-4 py-2 border rounded-md hidden">
+                    </div>
+                    <div class="mb-4 hidden" id="confirmPasswordContainer">
+                        <h1 class="text-2xl font-bold">Confirm Password</h1>
+                        <input id="confirmPasswordInput" type="password" name="confirm_password" class="w-full max-w-md px-4 py-2 border rounded-md">
+                    </div>
+                    <div class="flex justify-center">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hidden" id="saveButton">Save</button>
+                    </div>
+                </div>
+                <script>
+                    document.querySelector('button[onclick*="editProfileModal"]').addEventListener('click', function() {
+                        document.getElementById('usernameDisplay').classList.add('hidden');
+                        document.getElementById('usernameInput').classList.remove('hidden');
+                        document.getElementById('emailDisplay').classList.add('hidden');
+                        document.getElementById('emailInput').classList.remove('hidden');
+                        document.getElementById('passwordDisplay').classList.add('hidden');
+                        document.getElementById('passwordInput').classList.remove('hidden');
+                        document.getElementById('confirmPasswordContainer').classList.remove('hidden');
+                        document.getElementById('saveButton').classList.remove('hidden');
+                        document.getElementById('profileImageInput').classList.remove('hidden');
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

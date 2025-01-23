@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl font-bold text-center mb-8">Event List</h1>
+
+        <div class="flex justify-end mb-4">
+            <label for="event-count" class="mr-2">Show:</label>
+            <select id="event-count" class="p-2 border rounded" onchange="filterEvents()">
+                <option value="all">All</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+        </div>
+
+        {% if events %}
+        <div id="events-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for event in events %}
+            <div class="event-card bg-white p-4 rounded shadow-md relative" data-id="{{ event.id }}">
+                <div class="absolute top-2 right-2 flex space-x-2">
+                    <button class="text-blue-500 hover:text-blue-700" onclick="openUpdateModal('{{ event.id}}', '{{ event.title }}', '{{ event.description }}', '{{ event.start_date }}', '{{ event.end_date }}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828zM4 12v4h4l10-10-4-4L4 12z" />
+                        </svg>
+                    </button>
+                    <button class="text-red-500 hover:text-red-700" onclick="openDeleteModal('{{ event.id }}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H3a1 1 0 100 2h1v10a2 2 0 002 2h8a2 2 0 002-2V6h1a1 1 0 100-2h-2V3a1 1 0 00-1-1H6zm3 4a1 1 0 112 0v8a1 1 0 11-2 0V6zm4 0a1 1 0 112 0v8a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+
+                <h2 class="text-xl font-bold mb-2">{{ event.title }}</h2>
+                <p class="text-gray-700">{{ event.description }}</p>
+                <p class="text-gray-700 mt-2">Start: {{ event.start_date }}</p>
+                <p class="text-gray-700">End: {{ event.end_date }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-gray-700">No events found.</p>
+        {% endif %}
+    </div>
+
+    <!-- Update Modal -->
+    <div id="update-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Update Event</h2>
+            <form id="update-form" method="post" action="/events/api/events/update/">
+                <input type="hidden" id="update-id" name="id" />
+                <div class="mb-4">
+                    <label for="update-title" class="block text-sm font-medium">Title</label>
+                    <input type="text" id="update-title" name="title" class="w-full p-2 border rounded" />
+                </div>
+                <div class="mb-4">
+                    <label for="update-description" class="block text-sm font-medium">Description</label>
+                    <textarea id="update-description" name="description" class="w-full p-2 border rounded"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="update-start-date" class="block text-sm font-medium">Start Date</label>
+                    <input type="datetime-local" id="update-start-date" name="start_date" class="w-full p-2 border rounded" />
+                </div>
+                <div class="mb-4">
+                    <label for="update-end-date" class="block text-sm font-medium">End Date</label>
+                    <input type="datetime-local" id="update-end-date" name="end_date" class="w-full p-2 border rounded" />
+                </div>
+                <div class="mb-4">
+                    <label for="update-category" class="block text-sm font-medium">Category</label>
+                    <select id="update-category" name="category" class="w-full p-2 border rounded">
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeModal('update-modal')" class="mr-4 px-4 py-2 bg-gray-400 text-white rounded">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Are you sure you want to delete this event?</h2>
+            <form id="delete-form" method="post" action="/events/api/events/delete/">
+                <input type="hidden" id="delete-id" name="id" />
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeModal('delete-modal')" class="mr-4 px-4 py-2 bg-gray-400 text-white rounded">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openUpdateModal(id, title, description, startDate, endDate) {
+            document.getElementById('update-id').value = id;
+            document.getElementById('update-title').value = title;
+            document.getElementById('update-description').value = description;
+            document.getElementById('update-start-date').value = startDate;
+            document.getElementById('update-end-date').value = endDate;
+            document.getElementById('update-modal').classList.remove('hidden');
+        }
+
+        function openDeleteModal(id) {
+            document.getElementById('delete-id').value = id;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function filterEvents() {
+            const eventCount = document.getElementById('event-count').value;
+            const eventCards = document.querySelectorAll('.event-card');
+            eventCards.forEach((card, index) => {
+                if (eventCount === 'all' || index < eventCount) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

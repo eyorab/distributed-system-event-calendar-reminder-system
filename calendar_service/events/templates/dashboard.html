@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <header class="text-center my-8">
+            <h1 class="text-4xl font-bold text-gray-800">Event Calendar Dashboard</h1>
+        </header>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-700">Running Events</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% if running_events %}
+                    {% for event in running_events %}
+                        <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold text-gray-800">{{ event.title }}</h3>
+                            <p class="text-gray-600">{{ event.description }}</p>
+                            <p class="text-gray-600 mt-2">Start:{{ event.start_date }}</p>
+                            <p class="text-gray-600">End:{{ event.end_date }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-700">No running events found.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-700">Upcoming Events</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% if upcoming_events %}
+                    {% for event in upcoming_events %}
+                        <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold text-gray-800">{{ event.title }}</h3>
+                            <p class="text-gray-600">{{ event.description }}</p>
+                            <p class="text-gray-600 mt-2">Start:{{ event.start_date }}</p>
+                            <p class="text-gray-600">End: {{ event.end_date }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-700">No upcoming events found.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-700">Completed Events</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% if completed_events %}
+                    {% for event in completed_events %}
+                        <div class="bg-blue-100 p-4 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold text-gray-800">{{ event.title }}</h3>
+                            <p class="text-gray-600">{{ event.description }}</p>
+                            <p class="text-gray-600 mt-2">Start:{{ event.start_date }}</p>
+                            <p class="text-gray-600">End:{{ event.end_date }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-700">No completed events found.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+</body>
+</html>

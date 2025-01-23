@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+   <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            transition: margin 0.3s ease-in-out;
+            overflow-y: auto;
+        }
+        .sidebar.hidden {
+            margin-left: -250px;
+        }
+        .sidebar ul {
+            list-style: none;
+            margin-top: 50px;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .sidebar ul li:hover {
+            color: #1abc9c;
+        }
+        .content {
+            margin-left: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+        .navbar ul li{
+            display: inline;
+            list-style: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .toggle-btn {
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+        #calendar {
+            margin-top: 50px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li onclick="location.href='dashboard/'" >Dashboard</li>
+            <li onclick="location.href='event-list/'" >Events</li>
+            <li onclick="location.href='add-event/'" >Add Event</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="navbar">
+            <div>
+                <button class="toggle-btn" id="toggle-btn">|||</button>
+                <span>Event Calendar</span>
+            </div>
+        <div>
+            <ul >
+                <li>Notification</li>
+                <li>Profile</li>
+            </ul>
+        </div>
+    </div>
+        <div id="calendar"></div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script>
+        document.getElementById("toggle-btn").addEventListener("click", function() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("hidden");
+            const navbar = document.querySelector('.navbar');
+            if (sidebar.classList.contains('hidden')) {
+                navbar.style.left = '0';
+            } else {
+                navbar.style.left = '250px';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: "api/events/",
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
